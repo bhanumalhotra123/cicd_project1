@@ -5,6 +5,7 @@ pipeline{
             agent{
                 docker {
                     image 'openjdk:11'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps{
