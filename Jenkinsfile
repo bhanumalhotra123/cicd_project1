@@ -57,6 +57,7 @@ pipeline {
                 subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}",
                 to: "bhanucorrect@gmail.com"
         }
+        
     }
 }
 
