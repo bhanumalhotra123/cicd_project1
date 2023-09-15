@@ -27,7 +27,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_password')]) {
                         sh '''
                             docker build -t 54.237.103.169:8083/springapp:${VERSION} .
-                            docker login -u admin -p $docker_password 54.237.103.169:8083
+                            docker login -u admin -p $docker_password 34.201.164.31:8083
                             docker push 54.237.103.169:8083/springapp:${VERSION}
                             docker rmi 54.237.103.169:8083/springapp:${VERSION}
                         '''
@@ -57,7 +57,7 @@ pipeline {
                 subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}",
                 to: "bhanucorrect@gmail.com"
         }
-        
+
     }
 }
 
