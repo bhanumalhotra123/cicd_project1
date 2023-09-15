@@ -38,6 +38,7 @@ pipeline {
         stage('identifying misconfigs using datree in helm charts') {
             steps {
                 script {
+                    withEnv(["PATH=/home/ubuntu/.local/share/helm/plugins/helm-datree/bin:$PATH"])
                     dir('kubernetes/') {
                         sh 'helm datree test myapp/'
                     }
