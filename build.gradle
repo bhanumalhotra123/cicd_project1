@@ -29,7 +29,7 @@ test {
 
 sonarqube {
     properties {
-        property 'sonar.host.url', 'http://54.174.42.254:9000'  
-        property 'sonar.login', 'squ_c080342eb2e0d78918f83c465c3e827777f7309e'
+        property 'sonar.host.url', 'http://107.23.242.45:9000/'  
+        property 'sonar.login', 'sqa_ae4aaa3a0a88641fce30e470fddfb0f58ab7ea4a'
     }
 }
