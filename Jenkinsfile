@@ -50,6 +50,24 @@ pipeline {
                 }
             }
         }
+        stage('deploying application on Kubernetes Cluster') {
+            steps {
+                script {
+                    // Define the file ID as the same name as the configuration file
+                    def kubeConfigFileId = 'kube-dev-config'
+
+                    // Use the configFileProvider step to set the KUBECONFIG variable
+                    configFileProvider([configFile(fileId: kubeConfigFileId, variable: 'KUBECONFIG')]) {
+                        // Run the Helm upgrade command with the specified options
+                       dir('kubernetes/') {
+                        sh 'helm upgrade --install --set image.repository="34.229.254.193:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/'
+                    }
+                    }
+                }
+            }
+        }
+    
+
     }
     post {
         always {
