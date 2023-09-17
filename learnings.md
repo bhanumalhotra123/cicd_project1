@@ -114,7 +114,12 @@ pipeline {
   
 Push this code to devops branch and test by running the pipeline in jenkins.
 
+![1](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/170229f9-4c72-46cb-ad6c-867be38c21b1)
+
 Now we need to check the status of Quality Gates, if it is okay or not.
+
+![ac](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/c3a46a2b-e4cb-4ccc-9110-77850348394f)
+![ad](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/058b46b9-6de0-424d-ac00-122b3a952d38)
 
 On sonarqube server > Administration > Configuration > Webhook (Create a webhook here). Now we will add the part to check quality gate status in our jenkinsfile.
 
