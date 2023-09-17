@@ -151,6 +151,7 @@ pipeline {
 }  
 ```
 
+    
 Now the stage to create dockerfile and push the image to repository in nexus.  
 First we need to create a docker-hosted repository.  
 Nexus Server > Create Repository > docker(hosted) > give the name and http port as 8083   
@@ -167,6 +168,12 @@ docker info
   
 once this is done from jenkins host you can try docker login -u nexus_username -p nexus_pass nexus_ip:8083  
 ![6](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/06df03a2-83c0-422d-a1cf-4d9089585cdf)
+
+
+
+
+
+  
 
 
 
