@@ -54,7 +54,7 @@ Installations:  java -version
   chmod 700 get_helm.sh  
   ./get_helm.sh  
   Install datree plugin:  
-  https://github.com/datreeio/helm-datree
+  https://github.com/datreeio/helm-datree  
   Install docker:  https://github.com/datreeio/helm-datree  
   ip:8080  
 
@@ -179,6 +179,24 @@ docker info
   
 once this is done from jenkins host you can try docker login -u nexus_username -p nexus_pass nexus_ip:8083  
 ![6](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/06df03a2-83c0-422d-a1cf-4d9089585cdf)
+
+
+
+Now Dockerfile: 
+
+```
+FROM openjdk:11 as base
+WORKDIR /app
+COPY . .
+RUN chmod +x gradlew
+RUN ./gradlew build 
+
+FROM tomcat:9
+WORKDIR webapps
+COPY --from=base /app/build/libs/sampleWeb-0.0.1-SNAPSHOT.war .
+RUN rm -rf ROOT && mv sampleWeb-0.0.1-SNAPSHOT.war ROOT.war
+```
+
 
 
 
