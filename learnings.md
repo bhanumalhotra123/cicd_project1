@@ -424,9 +424,6 @@ After the approval we want a stage where we verify our application deployment by
 
 
 
-
-
-
   
 
 
