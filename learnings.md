@@ -91,8 +91,9 @@ Clone the repo with the src code in local and let us start writing the jenkinsfi
 
 Stage1:  sonar quality check  
 Install plugins in jenkins:  Sonarqube scanner, sonar gerrit, sonarqube generic coverage, sonarquality gate, quality gate.Install docker related plugins too if you want to use docker as an agent.  
-Configure System > go to sonarqube section > save the url and also create a credential in jenkins where you save the sonarqube token which you then select in configure system section.  
+Configure System > go to sonarqube section > save the url and also create a credential in jenkins where you save the sonarqube token which you then select in configure system section.    
 
+ 
 ```
 pipeline {  
     agent any  
@@ -110,14 +111,15 @@ pipeline {
     }
 }
 ```
-
+  
 Push this code to devops branch and test by running the pipeline in jenkins.
 
 Now we need to check the status of Quality Gates, if it is okay or not.
 
 On sonarqube server > Administration > Configuration > Webhook (Create a webhook here). Now we will add the part to check quality gate status in our jenkinsfile.
 
-
+   
+```
 pipeline {
     agent any
     environment {
@@ -143,7 +145,7 @@ pipeline {
         }
     }
 }  
-
+```
 
 
 
