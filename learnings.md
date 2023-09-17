@@ -137,9 +137,6 @@ On sonarqube server > Administration > Configuration > Webhook (Create a webhook
 ```
 pipeline {
     agent any
-    environment {
-        VERSION = "${env.BUILD_ID}"
-    }
     stages {
         stage("Sonar Quality Check") {
             steps {
@@ -196,6 +193,120 @@ WORKDIR webapps
 COPY --from=base /app/build/libs/sampleWeb-0.0.1-SNAPSHOT.war .
 RUN rm -rf ROOT && mv sampleWeb-0.0.1-SNAPSHOT.war ROOT.war
 ```
+
+We will create a secret text in jenkins in which we save docker password as docker_pass
+
+
+
+```
+pipeline {
+    agent any
+    environment {
+        VERSION = "${env.BUILD_ID}"
+    }
+    stages {
+        stage("Sonar Quality Check") {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                        sh 'chmod +x gradlew'
+                        sh './gradlew sonar'
+                    }
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        echo "Quality Gate Response: ${qg}" // Print the response for debugging
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+        stage("docker build & docker push") {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_password')]) {
+                        sh '''
+                            docker build -t 34.229.254.193:8083/springapp:${VERSION} .
+                            docker login -u admin -p $docker_password 34.229.254.193:8083
+                            docker push 34.229.254.193:8083/springapp:${VERSION}
+                            docker rmi 34.229.254.193:8083/springapp:${VERSION}
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+
+![7](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/f2b1bbcf-8e9c-492f-bdf3-ae1f9ff6f56f)
+
+  
+
+
+Now for sending the email about success or failure, install the email extension plugin in jenkins and configure the settings for it under Manage Jenkins > Configure System. We will be using smtp.gmail.com 
+
+
+After this we add the code to jenkinsfile for sending an email.
+  
+
+```
+pipeline {
+    agent any
+    environment {
+        VERSION = "${env.BUILD_ID}"
+    }
+    stages {
+        stage("Sonar Quality Check") {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                        sh 'chmod +x gradlew'
+                        sh './gradlew sonar'
+                    }
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        echo "Quality Gate Response: ${qg}" // Print the response for debugging
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+        stage("docker build & docker push") {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_password')]) {
+                        sh '''
+                            docker build -t 34.229.254.193:8083/springapp:${VERSION} .
+                            docker login -u admin -p $docker_password 34.229.254.193:8083
+                            docker push 34.229.254.193:8083/springapp:${VERSION}
+                            docker rmi 34.229.254.193:8083/springapp:${VERSION}
+                        '''
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            mail bcc: '',
+                body: "<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}",
+                cc: '',
+                charset: 'UTF-8',
+                from: '',
+                mimeType: 'text/html',
+                replyTo: '',
+                subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}",
+                to: "bhanucorrect@gmail.com"
+        }
+    }
+}
+```
+
 
 
 
