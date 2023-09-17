@@ -337,6 +337,7 @@ Now another stage is added to the jenkins file for it
                 script {
                     withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_password')]) {
                         dir('kubernetes/') {
+
                             sh '''
                                 helmversion=$(helm show chart myapp | grep version | cut -d: -f 2 | tr -d ' ')
                                 tar -czvf myapp-${helmversion}.tgz myapp/
@@ -349,9 +350,11 @@ Now another stage is added to the jenkins file for it
         }
 ```
 
-![aa](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/2c03240a-0a89-46e0-a10f-76ce0c095c89)
+![ab](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/134e99f8-c33d-47ab-b82b-f22ce320bc28)
 
 ![Screenshot_20230916-190733](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/07817acc-6bb2-4998-9c60-f799872d1f08)
+
+
 
   
 
