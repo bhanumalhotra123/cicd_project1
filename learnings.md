@@ -64,7 +64,7 @@ ip:8080
    admin:admin  
 
 4. Setup K8s
-   https://medium.com/@mehmetodabashi/installing-kubernetes-on-ubuntu-20-04-e49c43c63d0c
+   https://medium.com/@mehmetodabashi/installing-kubernetes-on-ubuntu-20-04-e49c43c63d0c  
    Command which didn't worked in the article above:
    sudo tee /etc/docker/daemon.json <<EOF  
 {  
@@ -80,7 +80,38 @@ EOF
 An error: https://programmerall.com/article/99842435629/
 ________________________________________________________________________________________________________________________________________________________________________________________________________________
 
+For building the application we use ./gradlew build and for static code analysis we use ./gradlew sonar  
 
+We will create jenkins pipeline  
+New Item > Gave repository url > */devops branch selected  
+
+Clone the repo with the src code in local and let us start writing the jenkinsfile   (Install few extensions related to jenkinsfile in vscode)  
+
+Stage1:  
+
+pipeline {
+    agent any
+    environment {
+        VERSION = "${env.BUILD_ID}"
+    }
+    stages {
+        stage("Sonar Quality Check") {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonar-token') {
+                        sh 'chmod +x gradlew'
+                        sh './gradlew sonar'
+                    }
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        echo "Quality Gate Response: ${qg}" // Print the response for debugging
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
 
 
 
