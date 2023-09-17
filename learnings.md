@@ -15,3 +15,63 @@ Helm: Helps us manage the k8s applications using helm charts. Say you have to ma
 Datree: Prevents kubernetes misconfigurations from reaching production.  
 
 
+Steps:  
+Pull the code from github  
+Do the static code analysis using Sonarqube with the help of sonarqube gradle plugin  
+Check the status of quality gate in sonar  
+Using the multistage dockerfile build the code, generate artifact and create docker image   
+Push the image to the private repository which is in nexus  
+Check if any misconfigurations in helm charts  
+Helm charts push to nexus  
+Manual approval  
+Deploy to k8s cluster  
+If any stage fails we will send an email  
+
+5 ec2 machines(t2-medium) ubuntu  
+  
+Installations:  java -version
+1. Jenkins 2. Sonarqube 3. Nexus 4. k8s-master 5. k8s-node
+
+1.Jenkins Server:  
+  sudo apt update  
+  sudo apt install openjdk-11-jdk  
+  java -version  
+  Install jenkins:  
+  https://www.jenkins.io/doc/book/installing/linux/  
+
+ip:8080
+
+2. Sonarqube
+   Install Docker: https://docs.docker.com/engine/install/ubuntu/
+   docker run -d -p 9000:9000 sonarqube:lts
+   ip:9000
+
+3. Nexus
+   apt-get install wget ( install if you dont have wget )  
+   java -version ( make sure java is installed which should be java 8 or higher version )  
+   wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz   
+   tar -xvf latest-unix.tar.gz    
+   cd nexus-3.35.0-02/bin  
+   ./nexus start ( starts the nexus artifactory )  
+   ./nexus status ( by this you check the status of nexus artifactory )  
+   To access this use http://ip_Address:8081 
+   admin:admin  
+
+4. Setup K8s
+   https://medium.com/@mehmetodabashi/installing-kubernetes-on-ubuntu-20-04-e49c43c63d0c
+   Command which didn't worked in the article above:
+   sudo tee /etc/docker/daemon.json <<EOF  
+{  
+  "exec-opts": ["native.cgroupdriver=systemd"],  
+  "log-driver": "json-file",  
+  "log-opts": {  
+    "max-size": "100m"  
+  },  
+  "storage-driver": "overlay2"  
+}  
+EOF  
+
+
+
+
+
