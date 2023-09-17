@@ -1,7 +1,7 @@
 Flow of the CICD:  
-                                --> Docker --> Nexus Repository  
+----------------------->Jenkins --> Docker --> Nexus Repository  
 Dev Team --> GitHub --> Jenkins --> Gradle --> Sonarqube  
-                                --> Helm --> Datree --> Kubernetes  
+----------------------->Jenkins--> Helm --> Datree --> Kubernetes  
 
 
 Github to store application code, Dockerfile, Jenkinsfile, kubernetes manifest files.  
@@ -38,7 +38,13 @@ Installations:  java -version
   java -version  
   Install jenkins:  
   https://www.jenkins.io/doc/book/installing/linux/  
-
+  Install helm:
+  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3  
+  chmod 700 get_helm.sh  
+  ./get_helm.sh  
+  Install datree plugin:  
+  https://github.com/datreeio/helm-datree
+  Install docker:  https://github.com/datreeio/helm-datree  
 ip:8080
 
 2. Sonarqube
@@ -69,7 +75,11 @@ ip:8080
   },  
   "storage-driver": "overlay2"  
 }  
+
 EOF  
+An error: https://programmerall.com/article/99842435629/
+________________________________________________________________________________________________________________________________________________________________________________________________________________
+
 
 
 
