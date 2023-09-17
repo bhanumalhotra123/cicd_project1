@@ -88,9 +88,9 @@ New Item > Gave repository url > */devops branch selected
 Clone the repo with the src code in local and let us start writing the jenkinsfile   (Install few extensions related to jenkinsfile in vscode)  
 
 Stage1:  
-
-pipeline {
-    agent any
+```
+pipeline {  
+    agent any  
     environment {
         VERSION = "${env.BUILD_ID}"
     }
@@ -112,7 +112,7 @@ pipeline {
                 }
             }
         }
-
+```
 
 
 
