@@ -1,7 +1,7 @@
-Flow of the CICD:
-                                --> Docker --> Nexus Repository
-Dev Team --> GitHub --> Jenkins --> Gradle --> Sonarqube
-                                --> Helm --> Datree --> Kubernetes
+Flow of the CICD:  
+                                --> Docker --> Nexus Repository  
+Dev Team --> GitHub --> Jenkins --> Gradle --> Sonarqube  
+                                --> Helm --> Datree --> Kubernetes  
 
 
 Github to store application code, Dockerfile, Jenkinsfile, kubernetes manifest files.  
@@ -16,16 +16,16 @@ Datree: Prevents kubernetes misconfigurations from reaching production.
 
 
 Steps:  
-Pull the code from github  
-Do the static code analysis using Sonarqube with the help of sonarqube gradle plugin  
-Check the status of quality gate in sonar  
-Using the multistage dockerfile build the code, generate artifact and create docker image   
-Push the image to the private repository which is in nexus  
-Check if any misconfigurations in helm charts  
-Helm charts push to nexus  
-Manual approval  
-Deploy to k8s cluster  
-If any stage fails we will send an email  
+1.Pull the code from github  
+2.Do the static code analysis using Sonarqube with the help of sonarqube gradle plugin  
+3.Check the status of quality gate in sonar  
+4.Using the multistage dockerfile build the code, generate artifact and create docker image   
+5.Push the image to the private repository which is in nexus  
+6.Check if any misconfigurations in helm charts  
+7.Helm charts push to nexus  
+8.Manual approval  
+9.Deploy to k8s cluster  
+10.If any stage fails we will send an email  
 
 5 ec2 machines(t2-medium) ubuntu  
   
