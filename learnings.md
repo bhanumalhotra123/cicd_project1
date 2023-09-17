@@ -359,7 +359,8 @@ Now another stage is added to the jenkins file for it
 Now in our kubernetes cluster we need to bring manifest files from a private repository so we need to do some configurations  
 cd .kube  
 cat config  
-Now we have to save this config in our jenkins. First we will need to download configFileprovider plugin in our jenkins  and then in manage jenkins section we get the option to save our config files. There we save this file.  
+Now we have to save this config in our jenkins. First we will need to download configFileprovider plugin in our jenkins  and then in manage jenkins section we get the option to save our config files. There we save this file.  (Kubernetes continous deploy plugin is no more available.)  
+
 
 ```
         stage('deploying application on Kubernetes Cluster') {
@@ -380,7 +381,46 @@ Now we have to save this config in our jenkins. First we will need to download c
         }
 ```
 
+We need to add insecure registry to daemon.json in our node-k8s machine.  
+We also need to create a secret    
 
+Create this on master node:  
+kubectl create secret docker-registry registry-secret --docker-server=34.229.254.193:8083 --docker-username=admin --docker-password=password --docker-email=not-needed@example.com  
+
+This will help k8s-cluster machines to fetch the helm configurations from the nexus private repository.   
+
+Now once this is working, we will add a manual approval step in our pipeline.
+
+
+```
+        stage('manual approval'){
+            steps{
+                script{
+                    timeout(10) {
+                        mail bcc: '', body: "<br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> Go to build url and approve the deployment request <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "${currentBuild.result} CI: Project name -> ${env.JOB_NAME}", to: "bhanucorrect@gmail.com";  
+                        input(id: "Deploy Gate", message: "Deploy ${params.project_name}?", ok: 'Deploy')
+                    }
+                }
+            }
+        }
+```
+
+  
+After the approval we want a stage where we verify our application deployment by sending a curl request to the deployed application from another pod:
+
+```
+        stage('verifying app deployment'){
+            steps{
+                script{
+                    def kubeConfigFieldId = 'kube-dev-config'
+                     configFileProvider([configFile(fieldId: 'kubeConfigFieldId', variable: 'KUBECONFIG')]) {
+                         sh 'kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl myjavaapp-myapp:8080'
+
+                     }
+                }
+            }
+        }
+```
 
 
 
