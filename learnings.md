@@ -45,14 +45,14 @@ Installations:  java -version
   Install datree plugin:  
   https://github.com/datreeio/helm-datree
   Install docker:  https://github.com/datreeio/helm-datree  
-ip:8080
+  ip:8080  
 
 2. Sonarqube
    Install Docker: https://docs.docker.com/engine/install/ubuntu/
    docker run -d -p 9000:9000 sonarqube:lts
-   ip:9000
+   ip:9000  
 
-3. Nexus
+3. Nexus  
    apt-get install wget ( install if you dont have wget )  
    java -version ( make sure java is installed which should be java 8 or higher version )  
    wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz   
@@ -61,12 +61,12 @@ ip:8080
    ./nexus start ( starts the nexus artifactory )  
    ./nexus status ( by this you check the status of nexus artifactory )  
    To access this use http://ip_Address:8081 
-   admin:admin  
+   admin:admin    
 
 4. Setup K8s
    https://medium.com/@mehmetodabashi/installing-kubernetes-on-ubuntu-20-04-e49c43c63d0c  
-   Command which didn't worked in the article above:
-   ```
+   Command which didn't worked in the article above:  
+
    sudo tee /etc/docker/daemon.json <<EOF  
 {  
   "exec-opts": ["native.cgroupdriver=systemd"],  
@@ -78,7 +78,7 @@ ip:8080
 }  
 
 EOF  
-```
+  
 An error: https://programmerall.com/article/99842435629/
 ________________________________________________________________________________________________________________________________________________________________________________________________________________
 
