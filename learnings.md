@@ -309,6 +309,54 @@ pipeline {
 
 
 
+Now for datree validation of helm charts, we add another stage in our jenkinfile:
+  
+```
+        stage('indentifying misconfigs using datree in helm charts'){
+            steps{
+                script{
+
+                    dir('kubernetes/') {
+                        withEnv(['DATREE_TOKEN=']) {
+                              sh 'helm datree test myapp/'
+                        }
+                    }
+                }
+            }
+        }
+```
+
+After this we will push our helm charts to our nexus repository.  
+On nexus server > Create repository > helm (hosted) > give a name and create.  
+Now another stage is added to the jenkins file for it  
+
+
+```
+        stage("pushing the helm charts to Nexus") {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker_pass', variable: 'docker_password')]) {
+                        dir('kubernetes/') {
+                            sh '''
+                                helmversion=$(helm show chart myapp | grep version | cut -d: -f 2 | tr -d ' ')
+                                tar -czvf myapp-${helmversion}.tgz myapp/
+                                curl -u admin:$docker_password http://34.229.254.193:8081/repository/helm-hosted/ --upload-file myapp-${helmversion}.tgz -v
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+```
+
+![aa](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/2c03240a-0a89-46e0-a10f-76ce0c095c89)
+
+![Screenshot_20230916-190733](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/07817acc-6bb2-4998-9c60-f799872d1f08)
+
+  
+
+
+
 
 
 
