@@ -151,5 +151,23 @@ pipeline {
 }  
 ```
 
+Now the stage to create dockerfile and push the image to repository in nexus.  
+First we need to create a docker-hosted repository.  
+Nexus Server > Create Repository > docker(hosted) > give the name and http port as 8083   
+![4](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/974ff9e6-ec00-48f6-8543-ba411be35307)  
+
+  
+On jenkins host also we need to configure this repository  
+To setup Insecure Registries: we need to edit or if not present create a file /etc/docker/daemon.json in that file add details of nexus  
+
+{ "insecure-registries":["nexus_machine_ip:8083"] }
+
+once that's done we need to execute systemctl restart docker this is to apply new changes, also we can verify whether registry is added or not by executing  
+docker info   
+  
+once this is done from jenkins host you can try docker login -u nexus_username -p nexus_pass nexus_ip:8083  
+![6](https://github.com/bhanumalhotra123/cicd_project1/assets/144083659/06df03a2-83c0-422d-a1cf-4d9089585cdf)
+
+
 
 
